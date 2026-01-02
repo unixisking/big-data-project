@@ -1,0 +1,57 @@
+version: "3.9"
+
+services:
+  # =======================
+  # BaseX (XML natif)
+  # =======================
+  basex:
+    image: basex/basexhttp:latest
+    container_name: basex
+    ports:
+      - "8984:8984" # Interface Web BaseX
+      - "1984:1984" # Client Server Protocol
+    volumes:
+      - ./data/basex:/srv/basex/data
+    environment:
+      - BASEX_USER=admin
+      - BASEX_PASSWORD=admin
+      - BASEX_JVM=-Djdk.xml.entityExpansionLimit=0 -Djdk.xml.totalEntitySizeLimit=0
+    restart: unless-stopped
+
+  mongodb:
+    image: mongo:7
+    container_name: mongodb
+    ports:
+      - "27017:27017"
+    volumes:
+      - ./data/mongo:/data/db
+    restart: unless-stopped
+
+  postgres:
+    image: postgres:16
+    container_name: postgres
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_DB=litcovid_db
+      - POSTGRES_USER=admin
+      - POSTGRES_PASSWORD=admin
+    volumes:
+      - ./data/postgres:/var/lib/postgresql/data
+      # Volume for the 9Gs you dig
+      - ./data/postgres/:/data/db
+      # To run the init scripts
+      - ./init-scripts:/docker-entrypoint-initdb.d
+    restart: unless-stopped
+
+  neo4j:
+    image: neo4j:latest
+    container_name: neo4j
+    ports:
+      - "7474:7474" # Web Interface (HTTP)
+      - "7687:7687" # Bolt Protocol (Binary)
+    volumes:
+      - ./data/neo4j/:/data/db
+    environment:
+      - NEO4J_AUTH=neo4j/password
+    restart: unless-stopped

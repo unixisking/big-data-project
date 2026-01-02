@@ -1,0 +1,4 @@
+data/
+.venv/
+performance/**/*.txt
+litcovid2BioCJSON
