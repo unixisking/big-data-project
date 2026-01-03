@@ -5,7 +5,7 @@
             "name": "Python: Export Refs",
             "type": "debugpy",
             "request": "launch",
-            "program": "${workspaceFolder}/basex/export-refs.py",
+            "program": "${workspaceFolder}/mongodb/export-refs.py",
             "console": "integratedTerminal",
             "justMyCode": true,
             "env": {
